@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sql_tools"
+name = "sqlite_tools"
 authors = [
     {name = "QuakeCoRE" },
 ]
@@ -11,6 +11,14 @@ description = "A collection of tools for working with SQL databases"
 readme = "README.md"
 requires-python = ">=3.9"
 dynamic = ["version", "dependencies"]
+
+[project.optional-dependencies]
+notebook = [
+    "ipykernel",
+]
+
+[project.scripts]
+sqlite-query = "sqlite_tools.cli:app"
 
 [tool.setuptools]
 packages = ["sqlite_tools"]
