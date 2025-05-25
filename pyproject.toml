@@ -3,14 +3,17 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "PACKAGE NAME HERE"
+name = "sql_tools"
 authors = [
     {name = "QuakeCoRE" },
 ]
-description = "PACKAGE DESCRIPTION HERE"
+description = "A collection of tools for working with SQL databases"
 readme = "README.md"
 requires-python = ">=3.9"
 dynamic = ["version", "dependencies"]
+
+[tool.setuptools]
+packages = ["sqlite_tools"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
