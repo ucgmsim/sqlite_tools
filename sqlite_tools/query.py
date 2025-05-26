@@ -3,9 +3,7 @@ Functions to query the NZGD SQLite database maintained by Prof. Brendon Bradley'
 research group at the University of Canterbury.
 """
 
-
 import sqlite3
-import time
 
 import numpy as np
 import pandas as pd
@@ -44,13 +42,7 @@ def cpt_measurements_for_one_nzgd(
     WHERE cptreport.nzgd_id = ?
     ORDER BY cptmeasurements.depth ASC;"""
 
-    t1 = time.time()
     cpt_measurements_df = pd.read_sql(query, conn, params=(selected_nzgd_id,))
-    t2 = time.time()
-
-    print(
-        f"Time to extract CPT measurements for cpt_id={selected_nzgd_id} from SQLite: {t2 - t1:.2f} s"
-    )
 
     return cpt_measurements_df
 
@@ -82,13 +74,7 @@ def spt_measurements_for_one_nzgd(
     WHERE sptmeasurements.borehole_id = ?
     ORDER BY sptmeasurements.depth ASC;"""
 
-    t1 = time.time()
     spt_measurements_df = pd.read_sql(query, conn, params=(selected_nzgd_id,))
-    t2 = time.time()
-
-    print(
-        f"Time to extract CPT measurements for cpt_id={selected_nzgd_id} from SQLite: {t2 - t1:.2f} s"
-    )
 
     return spt_measurements_df
 
@@ -214,7 +200,6 @@ def cpt_vs30s_for_one_nzgd_id(
         ON nzgdrecord.city_id = city.city_id
     WHERE cptvs30estimates.nzgd_id = ?;"""
 
-    t1 = time.time()
     cpt_vs30_df = pd.read_sql(query, conn, params=(selected_nzgd_id,))
 
     # Add columns needed for the web app
@@ -246,12 +231,6 @@ def cpt_vs30s_for_one_nzgd_id(
             "borehole_diameter": "spt_borehole_diameter",
         },
         inplace=True,
-    )
-
-    t2 = time.time()
-
-    print(
-        f"Time to extract Vs30s for nzgd_id={selected_nzgd_id} from SQLite: {t2 - t1:.2f} s"
     )
 
     return cpt_vs30_df
@@ -323,7 +302,6 @@ def spt_vs30s_for_one_nzgd_id(
         ON nzgdrecord.city_id = city.city_id
     WHERE sptvs30estimates.spt_id = ?;"""
 
-    t1 = time.time()
     spt_vs30_df = pd.read_sql(query, conn, params=(selected_nzgd_id,))
     spt_vs30_df.rename(columns={"spt_id": "nzgd_id"}, inplace=True)
 
@@ -343,12 +321,6 @@ def spt_vs30s_for_one_nzgd_id(
     )
     spt_vs30_df["gwl_residual"] = (
         spt_vs30_df["measured_gwl"] - spt_vs30_df["model_gwl_westerhoff_2019"]
-    )
-
-    t2 = time.time()
-
-    print(
-        f"Time to extract Vs30s for nzgd_id={selected_nzgd_id} from SQLite: {t2 - t1:.2f} s"
     )
 
     return spt_vs30_df
@@ -371,8 +343,8 @@ def all_vs30s_given_correlations(
         Available options are "boore_2004", and "boore_2011".
     selected_cpt_to_vs_correlation : str
         The selected CPT to Vs correlation name.
-        Available options are "andrus_2007_pleistocene", "andrus_2007_holocene", 
-        "andrus_2007_tertiary_age_cooper_marl", "robertson_2009", "hegazy_2006", 
+        Available options are "andrus_2007_pleistocene", "andrus_2007_holocene",
+        "andrus_2007_tertiary_age_cooper_marl", "robertson_2009", "hegazy_2006",
         "mcgann_2015", "mcgann_2018".
     selected_spt_to_vs_correlation : str
         The selected SPT to Vs correlation name.
@@ -462,14 +434,11 @@ def all_vs30s_given_correlations(
     """
 
     # Extract the CPT data from the SQLite database and store it in a Pandas DataFrame.
-    # Also get timing points (t1, t2) to assess performance.
-    t1 = time.time()
     cpt_database_df = pd.read_sql(
         cpt_sql_query,
         conn,
         params=(vs_to_vs30_correlation_id_value, cpt_to_vs_correlation_id_value),
     )
-    t2 = time.time()
 
     # Add columns needed for the web app
     cpt_database_df["record_name"] = (
@@ -485,7 +454,8 @@ def all_vs30s_given_correlations(
     )
 
     # The SQLite query to extract the SPT data.
-    # There far fewer SPT Vs30 values than CPT Vs30 values, so this should be fast, regardless of the query structure.
+    # There far fewer SPT Vs30 values than CPT Vs30 values, so this should be fast,
+    # regardless of the query structure.
     spt_sql_query = """
     WITH filtered_data AS (
         SELECT *
@@ -525,8 +495,6 @@ def all_vs30s_given_correlations(
     """
 
     # Extract the SPT data from the SQLite database and store it in a Pandas DataFrame.
-    # Also get timing points (t3, t4) to assess performance.
-    t3 = time.time()
     spt_partial_database_df = pd.read_sql(
         spt_sql_query,
         conn,
@@ -536,7 +504,6 @@ def all_vs30s_given_correlations(
             hammer_type_id_value,
         ),
     )
-    t4 = time.time()
 
     spt_measurements_df = pd.read_sql("SELECT * FROM sptmeasurements", conn)
     # Use Pandas groupby to quickly calculate the shallowest and deepest depths for each borehole
@@ -568,9 +535,6 @@ def all_vs30s_given_correlations(
     spt_database_df["gwl_residual"] = (
         spt_database_df["measured_gwl"] - spt_database_df["model_gwl_westerhoff_2019"]
     )
-
-    print(f"Time to extract CPT Vs30s and metadata from SQLite: {t2 - t1:.2f} s")
-    print(f"Time to extract SPT Vs30s and metadata from SQLite: {t4 - t3:.2f} s")
 
     # Concatenate the CPT and SPT dataframes so they can both be queried with a single Pandas query.
     # Columns that are only relevant for CPTs will be NaN for rows for SPTs (and vice versa).
