@@ -1,6 +1,6 @@
 ## Available values
 
-Some function parameters in [query.py.py](./sqlite_tools/query.py) can only take
+Some function parameters in [query.py](./sqlite_tools/query.py) can only take
 specific values. Note that these need to be given to the functions as strings. 
 
 ### selected_vs30_correlation options

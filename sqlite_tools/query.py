@@ -355,7 +355,7 @@ def spt_vs30s_for_one_nzgd_id(
 
 
 def all_vs30s_given_correlations(
-    selected_vs30_correlation: str,
+    selected_vs_to_vs30_correlation: str,
     selected_cpt_to_vs_correlation: str,
     selected_spt_to_vs_correlation: str,
     selected_hammer_type: str,
@@ -366,7 +366,7 @@ def all_vs30s_given_correlations(
 
     Parameters
     ----------
-    selected_vs30_correlation : str
+    selected_vs_to_vs30_correlation : str
         The selected Vs to Vs30 correlation name.
         Available options are "boore_2004", and "boore_2011".
     selected_cpt_to_vs_correlation : str
@@ -396,7 +396,7 @@ def all_vs30s_given_correlations(
 
     vs_to_vs30_correlation_id_value = int(
         vs_to_vs30_correlation_df[
-            vs_to_vs30_correlation_df["name"] == selected_vs30_correlation
+            vs_to_vs30_correlation_df["name"] == selected_vs_to_vs30_correlation
         ]["vs_to_vs30_correlation_id"].values[0]
     )
     cpt_to_vs_correlation_id_value = int(

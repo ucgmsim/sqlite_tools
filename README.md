@@ -1,9 +1,10 @@
 ## Introduction
 
-This Python package makes it easy to query the SQLite database containing our copy of 
-the New Zealand Geotechnical Database (NZGD). It provides a Python API for accessing various datasets.
+This Python package contains functions and example code to help access the SQLite 
+database containing our copy of the New Zealand Geotechnical Database (NZGD).
 
-For a guided walkthrough and interactive examples, please see the Jupyter Notebook: [sqlite_tools_usage_guide.ipynb](./sqlite_tools/sqlite_tools_usage_guide.ipynb).
+For a guided walkthrough and interactive examples, please see the Jupyter 
+Notebook: [sqlite_tools_usage_guide.ipynb](./sqlite_tools/sqlite_tools_usage_guide.ipynb).
 
 ## Installation
 
@@ -39,7 +40,7 @@ then install it using pip. If you're new to Git or pip, follow these steps:
 
 This will install the package and its dependencies.
 
-## Python API Usage
+## How to use
 
 You can import and use the data extraction functions directly in your Python 
 scripts. In the following examples, remember to replace placeholder paths and IDs. Some function parameters in [query.py](./sqlite_tools/query.py) can only take the specific values given in [available_options.md](./available_options.md).
