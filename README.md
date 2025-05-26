@@ -1,100 +1,52 @@
-# sqlite_tools
+## Introduction
 
-A Python package for querying an NZGD (New Zealand Geotechnical Database) style SQLite database and extracting geotechnical data. It provides both a command-line interface (CLI) and a Python API for accessing various datasets.
+This Python package makes it easy to query the SQLite database containing our copy of 
+the New Zealand Geotechnical Database (NZGD). It provides a Python API for accessing various datasets.
 
-For a guided walkthrough and interactive examples, please see the Jupyter Notebook: [sqlite_tools_usage_guide.ipynb](./sqlite_tools/examples/sqlite_tools_usage_guide.ipynb).
+For a guided walkthrough and interactive examples, please see the Jupyter Notebook: [sqlite_tools_usage_guide.ipynb](./sqlite_tools/sqlite_tools_usage_guide.ipynb).
 
 ## Installation
 
-### From local source
+To install `sqlite_tools`, you'll first need to clone the repository from GitHub and 
+then install it using pip. If you're new to Git or pip, follow these steps:
 
-If you have cloned this repository or have access to the source code, you can install the package using pip:
+**1. Clone the Repository:**
 
-1.  Navigate to the root directory of the `sqlite_tools` project (the one containing `pyproject.toml`).
-2.  Run the installation command:
+   *   Open your terminal or command prompt.
+   *   Navigate to the directory where you want to download the project. You can use 
+   the `cd` command (e.g., `cd Documents/projects`).
+   *   Run the following command to clone the repository. This will download a copy of 
+   the `sqlite_tools` project to your computer:
+       ```bash
+       git clone https://github.com/ucgmsim/sqlite_tools.git
+       ```
+   *   After the command finishes, a new directory named `sqlite_tools` will be created. 
+   Navigate into this directory:
+       ```bash
+       cd sqlite_tools
+       ```
 
-    ```bash
-    pip install .
-    ```
+**2. Install the Package:**
 
-This will install the package and its dependencies, making the `sqlite-query` command-line tool available in your environment.
+   *   Now that you are inside the `sqlite_tools` directory, you can install the package 
+   and its dependencies using pip. Pip is the Python package installer. If you have 
+   Python installed, you likely have pip as well.
+   *   Run the following command in your terminal:
+       ```bash
+       pip install .
+       ```
+   *   The `.` tells pip to install the package located in the current directory.
 
-## Command-Line Interface (CLI) Usage
-
-The package provides a CLI named `sqlite-query` for direct interaction with the database from your terminal.
-
-**General Syntax:**
-
-```bash
-sqlite-query [COMMAND] --db-path /path/to/your/database.db [OTHER_OPTIONS]
-```
-
-The output from all commands is printed to the standard output in CSV format. You can easily redirect this output to a file:
-
-```bash
-sqlite-query [COMMAND] --db-path /path/to/db.db [OPTIONS] > output.csv
-```
-
-### Available Commands:
-
-1.  **`cpt-measurements`**: Extracts Cone Penetration Test (CPT) measurements for a given NZGD ID.
-    *   `--db-path TEXT`: Path to the SQLite database file (required).
-    *   `--nzgd-id INTEGER`: The NZGD ID to query (required).
-    *   Example:
-        ```bash
-        sqlite-query cpt-measurements --db-path /data/nzgd_database.db --nzgd-id 123
-        ```
-
-2.  **`spt-measurements`**: Extracts Standard Penetration Test (SPT) measurements for a given NZGD ID.
-    *   `--db-path TEXT`: Path to the SQLite database file (required).
-    *   `--nzgd-id INTEGER`: The NZGD ID to query (required).
-    *   Example:
-        ```bash
-        sqlite-query spt-measurements --db-path /data/nzgd_database.db --nzgd-id 456
-        ```
-
-3.  **`spt-soil-types`**: Extracts SPT soil type information for a given NZGD ID.
-    *   `--db-path TEXT`: Path to the SQLite database file (required).
-    *   `--nzgd-id INTEGER`: The NZGD ID to query (required).
-    *   Example:
-        ```bash
-        sqlite-query spt-soil-types --db-path /data/nzgd_database.db --nzgd-id 789
-        ```
-
-4.  **`cpt-vs30s`**: Extracts CPT Vs30 (average shear wave velocity in the top 30m) estimates for a given NZGD ID.
-    *   `--db-path TEXT`: Path to the SQLite database file (required).
-    *   `--nzgd-id INTEGER`: The NZGD ID to query (required).
-    *   Example:
-        ```bash
-        sqlite-query cpt-vs30s --db-path /data/nzgd_database.db --nzgd-id 1011
-        ```
-
-5.  **`spt-vs30s`**: Extracts SPT Vs30 estimates for a given NZGD ID.
-    *   `--db-path TEXT`: Path to the SQLite database file (required).
-    *   `--nzgd-id INTEGER`: The NZGD ID to query (required).
-    *   Example:
-        ```bash
-        sqlite-query spt-vs30s --db-path /data/nzgd_database.db --nzgd-id 1213
-        ```
-
-6.  **`all-vs30s`**: Extracts all CPT and SPT Vs30 data based on selected Vs-to-Vs30 correlation, CPT-to-Vs correlation, SPT-to-Vs correlation, and hammer type.
-    *   `--db-path TEXT`: Path to the SQLite database file (required).
-    *   `--vs30-correlation TEXT`: Selected Vs to Vs30 correlation name (required).
-    *   `--cpt-to-vs-correlation TEXT`: Selected CPT to Vs correlation name (required).
-    *   `--spt-to-vs-correlation TEXT`: Selected SPT to Vs correlation name (required).
-    *   `--hammer-type TEXT`: Selected hammer type name (required).
-    *   Example:
-        ```bash
-        sqlite-query all-vs30s --db-path /data/nzgd_database.db \
-            --vs30-correlation "ExampleVs30Method" \
-            --cpt-to-vs-correlation "ExampleCPTtoVsMethod" \
-            --spt-to-vs-correlation "ExampleSPTtoVsMethod" \
-            --hammer-type "Safety Hammer"
-        ```
+This will install the package and its dependencies.
 
 ## Python API Usage
 
-You can also import and use the data extraction functions directly within your Python scripts. This provides more flexibility for integrating the data into other workflows.
+You can import and use the data extraction functions directly in your Python 
+scripts. In the following examples, remember to replace placeholder paths and IDs 
+with actual values for your use case.
+The `all_vs30s_given_correlations` function, in particular, relies on specific string 
+names for correlations and hammer types that must exist in your database tables.
+
 
 ```python
 import sqlite3
@@ -181,8 +133,4 @@ finally:
     if conn:
         conn.close()
         print("\nDatabase connection closed.")
-
 ```
-
-This provides a basic structure for using the functions. Remember to replace placeholder paths and IDs with actual values relevant to your database and use case.
-The `all_vs30s_given_correlations` function, in particular, relies on specific string names for correlations and hammer types that must exist in your database tables (`vstovs30correlation`, `cpttovscorrelation`, `spttovscorrelation`, `spttovs30hammertype`).

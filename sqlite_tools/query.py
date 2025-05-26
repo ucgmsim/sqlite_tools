@@ -368,12 +368,18 @@ def all_vs30s_given_correlations(
     ----------
     selected_vs30_correlation : str
         The selected Vs to Vs30 correlation name.
+        Available options are "boore_2004", and "boore_2011".
     selected_cpt_to_vs_correlation : str
         The selected CPT to Vs correlation name.
+        Available options are "andrus_2007_pleistocene", "andrus_2007_holocene", 
+        "andrus_2007_tertiary_age_cooper_marl", "robertson_2009", "hegazy_2006", 
+        "mcgann_2015", "mcgann_2018".
     selected_spt_to_vs_correlation : str
         The selected SPT to Vs correlation name.
+        Available options are "brandenberg_2010" and "kwak_2015".
     selected_hammer_type : str
         The selected hammer type name.
+        Available options are "Auto", "Safety", and "Standard".
     conn : sqlite3.Connection
         The SQLite database connection.
 

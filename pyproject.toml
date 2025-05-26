@@ -17,9 +17,6 @@ notebook = [
     "ipykernel",
 ]
 
-[project.scripts]
-sqlite-query = "sqlite_tools.cli:app"
-
 [tool.setuptools]
 packages = ["sqlite_tools"]
 
