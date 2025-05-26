@@ -2,6 +2,9 @@
 
 This Python package contains functions and example code to help access the SQLite 
 database containing our copy of the New Zealand Geotechnical Database (NZGD).
+Alternatively, to access the data using [DB Browser for SQLite](https://sqlitebrowser.org/), please 
+refer to 
+[this guide](https://wiki.canterbury.ac.nz/display/QuakeCore/Accessing+NZGD+data+in+our+SQLite+database).
 
 
 ## Installation
@@ -40,5 +43,5 @@ This will install the package and its dependencies.
 
 ## How to use
 
-For a guided walkthrough and interactive examples, please see the Jupyter 
+For a guided walkthrough and interactive examples, please refer to the Jupyter 
 Notebook: [sqlite_tools_usage_guide.ipynb](./sqlite_tools_usage_guide.ipynb).
