@@ -426,7 +426,7 @@ def all_vs30s_given_correlations(
     # to save time by avoiding SQLite JOIN operations with the tables that contain the string names of the correlations.
     # In testing, this query takes about 0.4 seconds to run. If this is too slow, write the required
     # data to a parquet file and read that instead, as reading from a parquet file was found to be 10x faster in testing.
-    cpt_sql_query = f"""
+    cpt_sql_query = """
     WITH filtered_data AS (
         SELECT cpt_id, nzgd_id, cpt_to_vs_correlation_id, vs_to_vs30_correlation_id, vs30, vs30_stddev
         FROM cptvs30estimates

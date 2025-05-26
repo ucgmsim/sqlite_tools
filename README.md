@@ -42,11 +42,7 @@ This will install the package and its dependencies.
 ## Python API Usage
 
 You can import and use the data extraction functions directly in your Python 
-scripts. In the following examples, remember to replace placeholder paths and IDs 
-with actual values for your use case.
-The `all_vs30s_given_correlations` function, in particular, relies on specific string 
-names for correlations and hammer types that must exist in your database tables.
-
+scripts. In the following examples, remember to replace placeholder paths and IDs. Some function parameters in [query.py](./sqlite_tools/query.py) can only take the specific values given in [available_options.md](./available_options.md).
 
 ```python
 import sqlite3
