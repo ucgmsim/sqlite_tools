@@ -559,3 +559,60 @@ def all_vs30s_given_correlations(
     )
 
     return database_df
+
+def get_westerhoff_model_gwl(conn: sqlite3.Connection, nzgd_id: int | list[int] | None = None) -> pd.DataFrame:
+    """
+    Extracts the Westerhoff et al. (2019) model groundwater level data from the SQLite database.
+
+    This function retrieves the Westerhoff et al. (2019) groundwater level model predictions
+    for specified NZGD ID(s) or all records in the database. The function supports
+    querying for a single NZGD ID, multiple NZGD IDs, or all records.
+
+    Parameters
+    ----------
+    conn : sqlite3.Connection
+        The SQLite database connection.
+    nzgd_id : int, list[int], or None, optional
+        The NZGD ID(s) to query. If None, returns all records. If int, returns
+        data for a single NZGD ID. If list[int], returns data for multiple NZGD IDs.
+        Default is None.
+
+    Returns
+    -------
+    pd.DataFrame
+        A DataFrame containing the NZGD ID and corresponding Westerhoff 2019 model
+        groundwater level values. The DataFrame has the following columns:
+        - nzgd_id : int
+            The NZGD record identifier
+        - model_gwl_westerhoff_2019 : float
+            The Westerhoff et al. (2019) model groundwater level prediction
+    """
+
+    # If nzgd_id is None, select all
+    if nzgd_id is None:
+        sql_query = """
+        SELECT nzgd_id, model_gwl_westerhoff_2019
+        FROM nzgdrecord
+        ORDER BY nzgd_id ASC
+        """
+        return pd.read_sql(sql_query, conn)
+
+    # If nzgd_id is a list, only select those in the list.
+    if isinstance(nzgd_id, list):
+        # Create placeholders for the IN clause
+        placeholders = ','.join(['?' for _ in nzgd_id])
+        sql_query = f"""
+        SELECT nzgd_id, model_gwl_westerhoff_2019
+        FROM nzgdrecord
+        WHERE nzgd_id IN ({placeholders})
+        ORDER BY nzgd_id ASC
+        """
+        return pd.read_sql(sql_query, conn, params=tuple(nzgd_id))
+
+    # If nzgd_id is a single int, select only that one
+    sql_query = """
+    SELECT nzgd_id, model_gwl_westerhoff_2019
+    FROM nzgdrecord
+    WHERE nzgd_id = ?
+    """
+    return pd.read_sql(sql_query, conn, params=(nzgd_id,))
